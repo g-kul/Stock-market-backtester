@@ -14,7 +14,7 @@ class Stock:
 
     def fetch_data(self, start_date, end_date):
         try:
-            self._data = yf.download(self._ticker, start=start, end=end)
+            self._data = yf.download(self._ticker, start=start_date, end=end_date)
             return self._data
         except Exception as e:
             print(f"Error: {e}")
