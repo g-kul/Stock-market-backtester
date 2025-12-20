@@ -17,16 +17,18 @@ class Portfolio:
     def transactions(self):
         return self._transactions
 
-    def buy(self, stock_obj, quantity, price, date):
+    def buy(self, stock, quantity, price, date):
         if self._cash >= (quantity * price):
-            self._holdings[stock_obj] = self._holdings.get(stock_obj, 0) + quantity
+            self._holdings[stock] = self._holdings.get(stock, 0) + quantity
+            balance_cash = self._cash - (quantity * price)
             trade = {}
             trade = {
                 "type": "BUY",
-                "ticker": stock_obj.ticker,
+                "ticker": stock.ticker,
                 "quantity": quantity,
                 "price": price,
                 "date": date,
+                "balance_cash": balance_cash,
             }
             self._transactions.append(trade)
             self._cash -= quantity * price
@@ -35,15 +37,18 @@ class Portfolio:
             print("Not enough cash to buy the shares")
             return False
 
-    def sell(self, stock_obj, quantity, price, date):
-        if stock_obj in self._holdings and self._holdings[stock_obj] >= quantity:
-            self._holdings[stock_obj] -= quantity
+    def sell(self, stock, quantity, price, date):
+        if stock in self._holdings and self._holdings[stock] >= quantity:
+            self._holdings[stock] -= quantity
+            balance_cash = self._cash + (quantity * price)
             trade = {}
             trade = {
                 "type": "SELL",
+                "ticker": stock.ticker,
                 "quantity": quantity,
                 "price": price,
                 "date": date,
+                "balance cash": balance_cash,
             }
             self._transactions.append(trade)
             self._cash += quantity * price
@@ -52,10 +57,9 @@ class Portfolio:
             print("Not enough shares available to execute sell")
             return False
 
-    def get_total_value_for_date(self, stock_obj, date):
-        price_for_date = stock_obj.get_price_on_date(date)
+    def get_total_value_for_date(self, stock, date):
+        price_for_date = stock.get_price_on_date(date)
         stock_value = 0
-        for i in self._holdings:
-            stock_value += self._holdings[i] * price_for_date[i]
+        stock_value += self._holdings[stock] * price_for_date
         total_value = stock_value + self.cash
         return total_value

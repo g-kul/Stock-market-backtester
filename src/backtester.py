@@ -5,11 +5,9 @@ class Backtest:
         self._initial_cash = initial_cash
         self._results = {}
         self._porfolio = None
-        self._portfolio_history = []
 
     def run_test(self, stock):
         self._portfolio = Portfolio(self._initial_cash)
-        self._porfolio_history = []
         holding = False
 
         df_run = self._strategy.generate_signals()
@@ -21,7 +19,7 @@ class Backtest:
         elif isinstance(self._strategy, COMBINED_S):
             signal_col = "COMB_Signal"
 
-        for date, row in df_run.iterrows():
+        for index, row in df_run.iterrows():
             date = index
             signal = row[signal_col]
             price = row["Close"]
@@ -42,21 +40,19 @@ class Backtest:
                     success = self._portfolio.sell(stock, quantity, price, date)
 
                     if success and self._portfolio is None:
-                        holdings = False
+                        holding = False
 
             portfolio_value = self._portfolio.get_total_value_for_date(stock, date)
-            self._portfolio_history.append((date, portfolio_value))
+        date_for_cal = 
+        self._calculate_metrics(stock,date)
+        return self._results
 
-            self._calculate_metrics()
-
-            return self._results
-
-    def _calculate_metrics(self):
+    def _calculate_metrics(self,stock,date):
         if not self._portfolio_history:
             print("No porfolio history")
             return
 
-        final_value = self._porfolio_history[-1][1]
+        final_value = self._portfolio.get_total_value_for_date(stock,date)
         total_returns = final_value - self._initial_cash
         total_returns_percentage = (
             (final_value - self._initial_cash) / (self._initial_cash)

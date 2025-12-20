@@ -38,7 +38,7 @@ class Stock:
     def get_price_on_date(self, date):
         if self.__has_data():
             try:
-                return self._data["Close"][date]
+                return self._data["Close"].loc[date]
             except KeyError:
                 print(f"The entered date - {date} is not correct!!!")
                 return None
