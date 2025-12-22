@@ -60,6 +60,6 @@ class Portfolio:
     def get_total_value_for_date(self, stock, date):
         price_for_date = stock.get_price_on_date(date)
         stock_value = 0
-        stock_value += self._holdings[stock] * price_for_date
+        stock_value += self._holdings.get(stock, 0) * price_for_date
         total_value = stock_value + self.cash
         return total_value
