@@ -7,12 +7,12 @@ class Visualizer:
 
 
     def plot_indicators(self):
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 8))
 
         try:
             ax1.plot(self._data.index,self._data["Close"],label="Price")
-            ax1.plot(self._data.index,self._data["SMA"],label="SMA")
-            ax1.plot(self._data.index,self._data["EMA"],label="EMA")
+            ax1.plot(self._data.index,self._data["Short_SMA"],label="Short_SMA")
+            ax1.plot(self._data.index,self._data["Short_EMA"],label="Short_EMA")
             ax1.set_ylabel("Price")
             ax1.legend()
             ax1.set_title(f"{self._ticker} Price and Indicators ")
@@ -28,3 +28,108 @@ class Visualizer:
             plt.show()
         except Exception as e:
             print(f"Error: {e})
+
+
+    def plot_signals(self,strategy):
+        fig,ax = plt.subplots(figsize=(14,8))
+        
+        try:
+            ax.plot(self._data.index, self._data["Close"],label="Close Price",linewidth=2)
+            if isinstance(strategy, MAC_S):
+                signal_col = "MAC_Signal"
+            elif isinstance(strategy, RSI_S):
+                signal_col = "RSI_Signal"
+            elif isinstance(strategy, COMBINED_S):
+                signal_col = "COMB_Signal"
+            buy_signals = df[self._data[signal_col] == 1]
+            ax.scatter(buy_signals.index, buy_signals["Close"],
+                       marker='^',color="green",s=100,label="Buy Signal",zorder=5)
+            sell_signals = df[self.data[signal_col] == -1]
+            ax.scatter(sell_signals.index, sell_signals["Close"],
+                       marker='^',color="green",s=100,label="Sell Signal",zorder=5)
+            ax.set_xlabel("Data")
+            ax.set_ylabel("Price")
+            ax.set_title(f"Signals plot - {self._ticker}")
+            ax.legend()
+            ax.grid(True,alpha=0.3)
+            plt.tight_layout()
+            plt.show()
+
+        except Exception as e:
+            print(f"Error: {e}")
+
+
+    def plot_portfolio_performance(self,backtest):
+        backtest_results = backtest.get_results()
+        portfolio_history = backtest_results['Porfolio history']
+        dates = [x[0] for x in portfolio_history]
+        values = [x[1] for x in portfolio_history]
+
+        fig,ax = plt.subplots(figsize=(14,8))
+
+        try:
+            ax.plot(dates,values,linewidth=2,label="Portfolio Value")
+            ax.axline(y=backtest_results['Initial cash'],
+                      color="gray",linestyle='--',label="Initial Cash")
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Portfolio Value ($)")
+            ax.set_title(f"Portfolio performance - {self._ticker}")
+            ax.legend()
+            ax.grid(True,alpha=0.3)
+
+            textstr = f"Initial: {backtest_results['Initial cash']:.2f}\n"
+            textstr = f"Final: {backtest_results['Final total cash']:.2f}\n"
+            textstr = f"Return: {backtest_results['Total returns']:.2f}\n"
+            textstr = f"Trades: {backtest_results['No of trades']:.2f}\n"
+
+            props = dic(boxstyle='round',facecolor="wheat",alpha=0.5)
+            ax.text(0.05,0.95,textstr,transform=ax.transAxes,fontsize=10,
+                    verticalalignment='top',bbox=props)
+            plt.tight_layout()
+            plt.show()
+        
+        except Exception as e:
+            print(f"Error: {e}")
+
+
+    def plot_ml_predictions(self,ml_df):
+        fig,(ax1,ax2) = plt.subplots(2,1,figsize=(14,10))
+
+        try:
+            ax1.plot(ml_df.index, ml_df['Close'], label="Actual Price",linewidth=2)
+            up_days = df[ml_df["ML_Signal"] > 0]
+            ax1.scatter(up_days.index,up_days["Close"],
+                        color="green",alpha=0.3,s=20,label="Predicted Up")
+
+            down_days = df[ml_df["ML_Signal"] < 0]
+            ax1.scatter(down_days.index,down_days["Close"],
+                        color="red",alpha=0.3,s=20,label="Predicted Down")
+            ax1.set_ylabel("Price")
+            ax1.set_title(f"ML Prediction - {self._ticker}")
+            ax1.legend()
+            ax1.grid(True,alpha=0.3)
+
+            #Plot-2 predicted values
+            ax2.plot(ml_df.index, ml_df['ML_Prediction'], label="Predicted Price",color="purple",linewidth=1.5)
+            ax2.axline(y=0,color='black',linestyle='-',linewidth=0.5)
+            ax2.fill_between(ml_df.index,0,ml_df['ML_Signal'],
+                             where(ml_df['ML_Signal'] > 0), color="green",alpha=0.3)
+            ax2.fill_between(ml_df.index,0,ml_df['ML_Signal'],
+                             where(ml_df['ML_Signal'] < 0), color="red",alpha=0.3)
+            ax2.set_xlabel("Date")
+            ax2.set_ylabel("Predicted Return")
+            ax2.set_title(f"ML Predicted Returns")
+            ax2.grid(True,alpha=0.3)
+
+            plt.tight_layout()
+            plt.show()
+
+        except Exception as e:
+            print(f"Error: {e}")
+        
+
+
+
+
+        
+
