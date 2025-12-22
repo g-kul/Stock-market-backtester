@@ -1,3 +1,7 @@
+import numpy as np
+import pandas as pd
+
+
 # Indicator class
 class Indicator:
     def __init__(self, stock):

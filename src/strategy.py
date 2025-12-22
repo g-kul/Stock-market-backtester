@@ -1,3 +1,7 @@
+import numpy as np
+import pandas as pd
+
+
 # Strategy class
 class Strategy:
     def __init__(self, stock):

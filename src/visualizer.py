@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt 
+
+
 #Visualizer class 
 class Visualizer:
     def __init__(self, stock):

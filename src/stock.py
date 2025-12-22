@@ -1,3 +1,8 @@
+import yfinance as yf
+import numpy as np
+import pandas as pd
+
+
 # Stock class
 class Stock:
     def __init__(self, ticker):

@@ -1,5 +1,10 @@
+import yfinance as yf
+import numpy as np
+import pandas as pd
+
+
 # Backtester class
-class Backtest:
+class Backtester:
     def __init__(self, strategy, initial_cash: int = 10000):
         self._strategy = strategy
         self._initial_cash = initial_cash
