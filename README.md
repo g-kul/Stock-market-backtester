@@ -1,65 +1,51 @@
-# Stock Market Backtester
+# Stock Market Analyzer & Backtester
 
-A Python-based stock market analysis and backtesting system for testing trading strategies on historical data.
+A Python-based trading system that analyzes stocks, generates signals using technical indicators and machine learning, and backtests strategies.
 
-## 🎯 Project Goals
-Learning project to understand:
-- Object-Oriented Programming in Python
-- Financial data analysis with pandas
-- Technical indicators implementation
-- Trading strategy backtesting
-- Machine learning for price prediction
+## Features
+- Fetch historical stock data via yfinance API
+- Calculate technical indicators (SMA, EMA, RSI)
+- Multiple trading strategies:
+  - Moving Average Crossover
+  - RSI Overbought/Oversold
+  - Combined Strategy
+  - Machine Learning Predictions
+- Backtest strategies on historical data
+- Portfolio tracking and performance metrics
+- Comprehensive visualizations
 
-## 🚀 Features (In Progress)
-- [ ] Stock data fetching via yfinance
-- [ ] Technical indicators (SMA, EMA, RSI)
-- [ ] Multiple trading strategies
-- [ ] Portfolio management simulation
-- [ ] Strategy backtesting engine
-- [ ] ML-based price prediction
-- [ ] Performance metrics & visualization
+## Tech Stack
+- Python 3
+- yfinance (stock data)
+- Pandas (data manipulation)
+- NumPy (calculations)
+- scikit-learn (machine learning)
+- matplotlib (visualization)
 
-## 📦 Installation
+## Usage
 ```bash
-# Clone repository
-git clone https://github.com/YOUR_USERNAME/stock-market-backtester.git
-cd stock-market-backtester
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
+python main.py
 ```
 
-## 🏗️ Project Structure
-```
-src/
-  ├── stock.py          # Stock data management
-  ├── indicator.py      # Technical indicators
-  ├── strategy.py       # Trading strategies
-  ├── portfolio.py      # Portfolio tracking
-  ├── backtester.py     # Backtesting engine
-  └── ml_predictor.py   # ML predictions
-```
+## Project Structure
+- `stock.py` - Stock data management
+- `indicator.py` - Technical indicator calculations
+- `strategy.py` - Trading strategy implementations
+- `portfolio.py` - Portfolio management
+- `backtester.py` - Backtesting engine
+- `ml_predictor.py` - Machine learning predictions
+- `visualizer.py` - Visualization tools
 
-## 📊 Usage
-(Coming soon - will add examples as features are built)
+## Performance Metrics
+- Total return %
+- Number of trades
+- Win rate
+- Max drawdown
+- Portfolio value over time
 
-## 📈 Progress Log
-- Day 1: Project setup, OOP learning
-- Day 2: (Update daily)
-
-## 🛠️ Technologies
-- Python 3.x
-- yfinance - Stock data API
-- pandas - Data manipulation
-- matplotlib - Visualization
-- scikit-learn - Machine learning
-
-## 📝 License
-MIT License - Feel free to use for learning
-
-## 🤝 Contributing
-This is a learning project, but feedback and suggestions welcome!
+## Future Improvements
+- Multi-stock portfolio support
+- More ML models (Random Forest, LSTM)
+- Risk management (stop-loss, position sizing)
+- Real-time trading integration
+- More technical indicators (MACD, Bollinger Bands)
