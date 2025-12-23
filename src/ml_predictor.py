@@ -51,7 +51,7 @@ class ML_Predictor:
             print("The model is not trained, call train_model() first")
             return None
 
-        X, Y, dates = self.prepare_features()
+        X, Y, dates = self._prepare_features()
         predictions = self._model.predict(X)
 
         self._data["ML_Prediction"] = np.nan
@@ -110,8 +110,6 @@ class ML_Predictor:
 
             final_value = self._portfolio.get_total_value_for_date(self._stock, date)
             self._holding_track.append((date, final_value))
-
-        self._calculate_metrics(self._stock, date)
 
         if not self._portfolio.transactions:
             print("No porfolio history")
