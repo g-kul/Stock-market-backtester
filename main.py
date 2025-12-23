@@ -1,10 +1,10 @@
-from backtester import Backtester
-from indicator import Indicator
-from ml_predictor import ML_Predictor
-from portfolio import Portfolio
-from stock import Stock
-from strategy import Strategy, MAC_S, RSI_S, COMBINED_S
-from visualizer import Visualizer
+from src.backtester import Backtester
+from src.indicator import Indicator
+from src.ml_predictor import ML_Predictor
+from src.portfolio import Portfolio
+from src.stock import Stock
+from src.strategy import Strategy, MAC_S, RSI_S, COMBINED_S
+from src.visualizer import Visualizer
 
 
 def test_rule_based_strategies():
@@ -26,8 +26,8 @@ def test_rule_based_strategies():
 
     # Add Indicators
     indicator = Indicator(stock)
-    indicator.add_sma(short_period=20, long_period=50)
-    indicator.add_ema(short_period=12, long_period=26)
+    indicator.add_sma(short_period=20, long_period=50, column="Close")
+    indicator.add_ema(short_period=12, long_period=26, column="Close")
     indicator.add_rsi(period=14)
     if indicator.check_indicators():
         print(f"Indicators added successfully to {stock.ticker}")
@@ -77,9 +77,9 @@ def test_rule_based_strategies():
         combined_signal_vis = vis.plot_signals(combined_strategy)
     elif choice == 3:
         # Portfolio peformace
-        mac_backtester_vis = vis.plot_porfolio_performance(mac_backtester)
-        rsi_backtester_vis = vis.plot_porfolio_performance(rsi_backtester)
-        combined_backtester_vis = vis.plot_porfolio_performance(combined_backtester)
+        mac_backtester_vis = vis.plot_portfolio_performance(mac_backtester)
+        rsi_backtester_vis = vis.plot_portfolio_performance(rsi_backtester)
+        combined_backtester_vis = vis.plot_portfolio_performance(combined_backtester)
     elif choice == 4:
         # Compare Strategies
         results_dict = {
@@ -125,7 +125,7 @@ def test_ml_strategy():
     print("-------ML Model Training complete")
 
     # Generate ML signals
-    ml_df = predictor.generate_ml_signals(threshold=0.02)
+    ml_df = predictor.generate_ml_signals(threshold=0.01)
     print("-------ML Signals Generated-------")
 
     # Backtester

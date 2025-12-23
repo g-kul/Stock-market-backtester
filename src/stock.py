@@ -20,6 +20,8 @@ class Stock:
     def fetch_data(self, start_date, end_date):
         try:
             self._data = yf.download(self._ticker, start=start_date, end=end_date)
+            if isinstance(self._data.columns, pd.MultiIndex):
+                self._data.columns = self._data.columns.get_level_values(0)
             return self._data
         except Exception as e:
             print(f"Error: {e}")
@@ -28,6 +30,8 @@ class Stock:
     def fetch_full_data(self):
         try:
             self._data = yf.download(self._ticker, period="max")
+            if isinstance(self._data.columns, pd.MultiIndex):
+                self._data.columns = self._data.columns.get_level_values(0)
             return self._data
         except Exception as e:
             print(f"Error: {e}")

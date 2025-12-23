@@ -1,5 +1,5 @@
-from portfolio import Portfolio
-from strategy import MAC_S, RSI_S, COMBINED_S
+from .portfolio import Portfolio
+from .strategy import MAC_S, RSI_S, COMBINED_S
 import yfinance as yf
 import numpy as np
 import pandas as pd
@@ -30,8 +30,9 @@ class Backtester:
 
         for index, row in df_run.iterrows():
             date = index
-            signal = row[signal_col]
-            price = row["Close"]
+            signal = row[signal_col].item()
+            price = row["Close"].item()
+            print(f"Debug: signal type = {type(signal)}, value = {signal}")
 
             if signal == 1 and not holding:
                 quantity = self._portfolio.cash // price

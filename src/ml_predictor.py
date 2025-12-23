@@ -1,5 +1,6 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
+from .portfolio import Portfolio
 import numpy as np
 import pandas as pd
 
@@ -73,6 +74,7 @@ class ML_Predictor:
         print(f"Buy Signals: {buy_signals_generated}")
         print(f"Sell Signals: {sell_signals_generated}")
         print(f"Threshold: {threshold * 100:.1f}%")
+        print(f"{df.columns}")
 
         return df
 
@@ -87,8 +89,8 @@ class ML_Predictor:
 
         for index, row in df_run.iterrows():
             date = index
-            signal = row[signal_col]
-            price = row["Close"]
+            signal = row[signal_col].item()
+            price = row["Close"].item()
 
             if signal == 1 and not holding:
                 quantity = self._portfolio.cash // price
