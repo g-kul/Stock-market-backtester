@@ -39,3 +39,7 @@ class Indicator:
         rs = avg_gain / avg_loss
         rsi = 100 - (100 / (1 + rs))
         self._stock["RSI"] = rsi.fillna(0)
+
+    def check_indicators(self):
+        required = {"Short_SMA", "Long_SMA", "Short_EMA", "Long_EMA", "RSI"}
+        return required.issubset(self._stock.columns)

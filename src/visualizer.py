@@ -15,7 +15,9 @@ class Visualizer:
         try:
             ax1.plot(self._data.index,self._data["Close"],label="Price")
             ax1.plot(self._data.index,self._data["Short_SMA"],label="Short_SMA")
+            ax1.plot(self._data.index,self._data["Long_SMA"],label="Long_SMA")
             ax1.plot(self._data.index,self._data["Short_EMA"],label="Short_EMA")
+            ax1.plot(self._data.index,self._data["Long_EMA"],label="Long_EMA")
             ax1.set_ylabel("Price")
             ax1.legend()
             ax1.set_title(f"{self._ticker} Price and Indicators ")
@@ -93,6 +95,37 @@ class Visualizer:
         
         except Exception as e:
             print(f"Error: {e}")
+
+
+    def compare_strategies(self, results_dict):
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+        
+        # Plot 1: Portfolio values over time
+        for strategy_name, results in results_dict.items():
+            history = results['Portfolio history']
+            dates = [x[0] for x in history]
+            values = [x[1] for x in history]
+            ax1.plot(dates, values, label=strategy_name, linewidth=2)
+        
+        ax1.set_xlabel('Date')
+        ax1.set_ylabel('Portfolio Value ($)')
+        ax1.set_title('Strategy Comparison - Portfolio Growth')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+        
+        # Plot 2: Bar chart of returns
+        strategy_names = list(results_dict.keys())
+        returns = [results_dict[name]['Total returns'] for name in strategy_names]
+        
+        colors = ['green' if r > 0 else 'red' for r in returns]
+        ax2.bar(strategy_names, returns, color=colors, alpha=0.7)
+        ax2.axhline(y=0, color='black', linestyle='-', linewidth=0.5)
+        ax2.set_ylabel('Return (%)')
+        ax2.set_title('Strategy Comparison - Total Returns')
+        ax2.grid(True, alpha=0.3, axis='y')
+        
+        plt.tight_layout()
+        plt.show()
 
 
     def plot_ml_predictions(self,ml_df):
