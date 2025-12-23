@@ -39,8 +39,6 @@ python main.py
 ## Performance Metrics
 - Total return %
 - Number of trades
-- Win rate
-- Max drawdown
 - Portfolio value over time
 
 ## Future Improvements
