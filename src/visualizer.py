@@ -46,7 +46,7 @@ class Visualizer:
                 signal_col = "RSI_Signal"
             elif isinstance(strategy, COMBINED_S):
                 signal_col = "COMB_Signal"
-            buy_signals = df[self._data[signal_col] == 1]
+            buy_signals = self._data[self._data[signal_col] == 1]
             ax.scatter(
                 buy_signals.index,
                 buy_signals["Close"],
@@ -56,7 +56,7 @@ class Visualizer:
                 label="Buy Signal",
                 zorder=5,
             )
-            sell_signals = df[self.data[signal_col] == -1]
+            sell_signals = self._data[self.data[signal_col] == -1]
             ax.scatter(
                 sell_signals.index,
                 sell_signals["Close"],
@@ -116,7 +116,7 @@ class Visualizer:
 
     def plot_portfolio_performance(self, backtest):
         backtest_results = backtest.get_results()
-        portfolio_history = backtest_results["Porfolio history"]
+        portfolio_history = backtest_results["Portfolio history"]
         dates = [x[0] for x in portfolio_history]
         values = [x[1] for x in portfolio_history]
 
@@ -124,7 +124,7 @@ class Visualizer:
 
         try:
             ax.plot(dates, values, linewidth=2, label="Portfolio Value")
-            ax.axline(
+            ax.axhline(
                 y=backtest_results["Initial cash"],
                 color="gray",
                 linestyle="--",
@@ -137,11 +137,11 @@ class Visualizer:
             ax.grid(True, alpha=0.3)
 
             textstr = f"Initial: {backtest_results['Initial cash']:.2f}\n"
-            textstr = f"Final: {backtest_results['Final total cash']:.2f}\n"
-            textstr = f"Return: {backtest_results['Total returns']:.2f}\n"
-            textstr = f"Trades: {backtest_results['No of trades']:.2f}\n"
+            textstr += f"Final: {backtest_results['Final total cash']:.2f}\n"
+            textstr += f"Return: {backtest_results['Total returns']:.2f}\n"
+            textstr += f"Trades: {backtest_results['No of trades']:.2f}\n"
 
-            props = dic(boxstyle="round", facecolor="wheat", alpha=0.5)
+            props = dict(boxstyle="round", facecolor="wheat", alpha=0.5)
             ax.text(
                 0.05,
                 0.95,
@@ -192,7 +192,7 @@ class Visualizer:
 
         try:
             ax1.plot(ml_df.index, ml_df["Close"], label="Actual Price", linewidth=2)
-            up_days = df[ml_df["ML_Signal"] > 0]
+            up_days = ml_df[ml_df["ML_Signal"] > 0]
             ax1.scatter(
                 up_days.index,
                 up_days["Close"],
@@ -202,7 +202,7 @@ class Visualizer:
                 label="Predicted Up",
             )
 
-            down_days = df[ml_df["ML_Signal"] < 0]
+            down_days = ml_df[ml_df["ML_Signal"] < 0]
             ax1.scatter(
                 down_days.index,
                 down_days["Close"],
@@ -224,12 +224,12 @@ class Visualizer:
                 color="purple",
                 linewidth=1.5,
             )
-            ax2.axline(y=0, color="black", linestyle="-", linewidth=0.5)
+            ax2.axhline(y=0, color="black", linestyle="-", linewidth=0.5)
             ax2.fill_between(
                 ml_df.index,
                 0,
                 ml_df["ML_Signal"],
-                where(ml_df["ML_Signal"] > 0),
+                ml_df["ML_Signal"] > 0,
                 color="green",
                 alpha=0.3,
             )
@@ -237,7 +237,7 @@ class Visualizer:
                 ml_df.index,
                 0,
                 ml_df["ML_Signal"],
-                where(ml_df["ML_Signal"] < 0),
+                ml_df["ML_Signal"] < 0,
                 color="red",
                 alpha=0.3,
             )

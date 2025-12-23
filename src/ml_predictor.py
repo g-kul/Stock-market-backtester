@@ -23,7 +23,7 @@ class ML_Predictor:
         df["Future_Returns"] = (df["Close"].shift(-1) / df["Close"]) - 1
         df = df.dropna()
         feature_columns = ["Price_Change", "SMA_Diff", "RSI_Feature"]
-        X = df["feature_columns"]
+        X = df[feature_columns]
         Y = df["Future_Returns"]
         dates = df.index
 
@@ -112,7 +112,7 @@ class ML_Predictor:
             self._holding_track.append((date, final_value))
 
         if not self._portfolio.transactions:
-            print("No porfolio history")
+            print("No portfolio history")
             return
 
         final_total_value = self._portfolio.get_total_value_for_date(self._stock, date)

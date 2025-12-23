@@ -1,3 +1,5 @@
+from portfolio import Portfolio
+from strategy import MAC_S, RSI_S, COMBINED_S
 import yfinance as yf
 import numpy as np
 import pandas as pd
