@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Backtester{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="{{ url_for('index') }}">Backtester</a>
+      <div class="nav-links">
+        <a href="{{ url_for('index') }}">Overview</a>
+        <a href="{{ url_for('backtest') }}" class="nav-cta">New Backtest</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-wrap">
+          {% for message in messages %}
+            <div class="alert">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Backtester — technical indicators, rule-based strategies, and a machine learning model, backtested on historical price data.</p>
+      <p class="footer-fine">Built with Python, pandas, scikit-learn, and yfinance. For research and education, not investment advice.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,4 +1,6 @@
-# Portfolio class
+"""Tracks cash, holdings, and trade history for a single backtest run."""
+
+
 class Portfolio:
     def __init__(self, initial_cash):
         self._cash = initial_cash
@@ -18,48 +20,40 @@ class Portfolio:
         return self._transactions
 
     def buy(self, stock, quantity, price, date):
-        if self._cash >= (quantity * price):
-            self._holdings[stock] = self._holdings.get(stock, 0) + quantity
-            balance_cash = self._cash - (quantity * price)
-            trade = {}
-            trade = {
-                "type": "BUY",
-                "ticker": stock.ticker,
-                "quantity": quantity,
-                "price": price,
-                "date": date,
-                "balance_cash": balance_cash,
-            }
-            self._transactions.append(trade)
-            self._cash -= quantity * price
-            return True
-        else:
+        if self._cash < (quantity * price):
             print("Not enough cash to buy the shares")
             return False
 
+        self._holdings[stock] = self._holdings.get(stock, 0) + quantity
+        self._cash -= quantity * price
+        self._transactions.append({
+            "type": "BUY",
+            "ticker": stock.ticker,
+            "quantity": quantity,
+            "price": price,
+            "date": date,
+            "balance_cash": self._cash,
+        })
+        return True
+
     def sell(self, stock, quantity, price, date):
-        if stock in self._holdings and self._holdings[stock] >= quantity:
-            self._holdings[stock] -= quantity
-            balance_cash = self._cash + (quantity * price)
-            trade = {}
-            trade = {
-                "type": "SELL",
-                "ticker": stock.ticker,
-                "quantity": quantity,
-                "price": price,
-                "date": date,
-                "balance cash": balance_cash,
-            }
-            self._transactions.append(trade)
-            self._cash += quantity * price
-            return True
-        else:
+        if stock not in self._holdings or self._holdings[stock] < quantity:
             print("Not enough shares available to execute sell")
             return False
 
+        self._holdings[stock] -= quantity
+        self._cash += quantity * price
+        self._transactions.append({
+            "type": "SELL",
+            "ticker": stock.ticker,
+            "quantity": quantity,
+            "price": price,
+            "date": date,
+            "balance_cash": self._cash,
+        })
+        return True
+
     def get_total_value_for_date(self, stock, date):
         price_for_date = stock.get_price_on_date(date)
-        stock_value = 0
-        stock_value += self._holdings.get(stock, 0) * price_for_date
-        total_value = stock_value + self.cash
-        return total_value
+        stock_value = self._holdings.get(stock, 0) * price_for_date
+        return stock_value + self._cash

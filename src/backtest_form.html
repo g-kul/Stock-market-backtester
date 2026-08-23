@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}New Backtest — Backtester{% endblock %}
+{% block content %}
+<section class="section form-section">
+  <div class="container container-narrow">
+    <p class="eyebrow">New Backtest</p>
+    <h1 class="page-title">Configure your backtest.</h1>
+    <p class="hero-sub">Choose a ticker, a date range, and which strategies to run.</p>
+
+    <form method="POST" action="{{ url_for('backtest') }}" class="card form-card">
+      <div class="form-row">
+        <label for="ticker">Ticker symbol</label>
+        <input type="text" id="ticker" name="ticker" placeholder="AAPL" required>
+      </div>
+
+      <div class="form-row form-row-split">
+        <div>
+          <label for="start_date">Start date</label>
+          <input type="text" id="start_date" name="start_date" placeholder="2020-01-01 or max" value="max">
+          <p class="field-hint">Use YYYY-MM-DD, or type "max" for the full available history.</p>
+        </div>
+        <div>
+          <label for="end_date">End date</label>
+          <input type="text" id="end_date" name="end_date" placeholder="2024-12-31">
+          <p class="field-hint">Required unless start date is "max".</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="initial_cash">Starting cash</label>
+        <input type="number" id="initial_cash" name="initial_cash" value="10000" min="100" step="100">
+      </div>
+
+      <div class="form-row">
+        <label>Strategies to test</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-card">
+            <input type="checkbox" name="strategies" value="mac" checked>
+            <span><strong>Moving Average Crossover</strong><br>Trend-following</span>
+          </label>
+          <label class="checkbox-card">
+            <input type="checkbox" name="strategies" value="rsi">
+            <span><strong>RSI</strong><br>Mean-reversion</span>
+          </label>
+          <label class="checkbox-card">
+            <input type="checkbox" name="strategies" value="combined">
+            <span><strong>Combined</strong><br>MAC + RSI</span>
+          </label>
+          <label class="checkbox-card">
+            <input type="checkbox" name="strategies" value="ml">
+            <span><strong>Machine Learning</strong><br>Linear regression</span>
+          </label>
+        </div>
+      </div>
+
+      <details class="advanced">
+        <summary>Advanced indicator settings</summary>
+        <div class="form-row form-row-split">
+          <div>
+            <label for="sma_short">Short SMA period</label>
+            <input type="number" id="sma_short" name="sma_short" value="20" min="2">
+          </div>
+          <div>
+            <label for="sma_long">Long SMA period</label>
+            <input type="number" id="sma_long" name="sma_long" value="50" min="2">
+          </div>
+        </div>
+        <div class="form-row form-row-split">
+          <div>
+            <label for="ema_short">Short EMA period</label>
+            <input type="number" id="ema_short" name="ema_short" value="12" min="2">
+          </div>
+          <div>
+            <label for="ema_long">Long EMA period</label>
+            <input type="number" id="ema_long" name="ema_long" value="26" min="2">
+          </div>
+        </div>
+        <div class="form-row form-row-split">
+          <div>
+            <label for="rsi_period">RSI period</label>
+            <input type="number" id="rsi_period" name="rsi_period" value="14" min="2">
+          </div>
+          <div></div>
+        </div>
+        <div class="form-row form-row-split">
+          <div>
+            <label for="rsi_oversold">RSI oversold threshold</label>
+            <input type="number" id="rsi_oversold" name="rsi_oversold" value="30" min="1" max="49">
+          </div>
+          <div>
+            <label for="rsi_overbought">RSI overbought threshold</label>
+            <input type="number" id="rsi_overbought" name="rsi_overbought" value="70" min="51" max="99">
+          </div>
+        </div>
+      </details>
+
+      <button type="submit" class="btn btn-primary btn-wide">Run Backtest</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

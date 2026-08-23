@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Backtester — Overview{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow">Stock Market Backtester</p>
+    <h1>Test a trading strategy<br>before you trust it.</h1>
+    <p class="hero-sub">Pull historical prices, layer on moving averages, RSI, and a machine learning model, then see exactly how each strategy would have performed — trade by trade.</p>
+    <a class="btn btn-primary" href="{{ url_for('backtest') }}">Start a Backtest</a>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Four ways to trade the same chart.</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>Moving Average Crossover</h3>
+        <p>Buys when the short-term average crosses above the long-term average, and sells on the reverse cross. A classic trend-following signal.</p>
+      </div>
+      <div class="feature-card">
+        <h3>RSI Overbought / Oversold</h3>
+        <p>Buys when momentum is stretched to the downside, sells when it's stretched to the upside. A contrarian, mean-reversion signal.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Combined Strategy</h3>
+        <p>Only trades when a moving-average crossover and a confirming RSI reading agree — fewer trades, higher conviction.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Machine Learning</h3>
+        <p>A linear regression model learns from price change, moving-average spread, and RSI to predict next-day returns.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">How a backtest runs.</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <h3>Fetch price history</h3>
+        <p>Enter a ticker and a date range. Daily prices are pulled straight from Yahoo Finance.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <h3>Layer on indicators</h3>
+        <p>SMA, EMA, and RSI are calculated across the full history before any strategy sees the data.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <h3>Simulate the trades</h3>
+        <p>Each strategy's buy and sell signals are run against a starting cash balance, one day at a time.</p>
+      </div>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('backtest') }}">Start a Backtest</a>
+  </div>
+</section>
+{% endblock %}

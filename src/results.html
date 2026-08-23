@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Results for {{ ticker }} — Backtester{% endblock %}
+{% block content %}
+<section class="section results-header">
+  <div class="container">
+    <p class="eyebrow">Results</p>
+    <h1 class="page-title">{{ ticker }}</h1>
+    <p class="hero-sub">{{ date_range_label }} · Starting cash ${{ "%.2f"|format(initial_cash) }}</p>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Price & indicators</h2>
+    <div class="chart-card">
+      <img src="data:image/png;base64,{{ indicator_chart }}" alt="Price and indicator chart">
+    </div>
+  </div>
+</section>
+
+{% if comparison_chart %}
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Strategy comparison</h2>
+    <div class="chart-card">
+      <img src="data:image/png;base64,{{ comparison_chart }}" alt="Strategy comparison chart">
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% for view in strategy_results %}
+<section class="section {{ 'section-alt' if loop.index0 is even else '' }}">
+  <div class="container">
+    <h2 class="section-title">{{ view.label }}</h2>
+    <p class="strategy-desc">{{ view.desc }}</p>
+
+    {% if view.results %}
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value {{ 'positive' if view.results['Percentage returns'] >= 0 else 'negative' }}">{{ "%+.1f"|format(view.results['Percentage returns']) }}%</span>
+          <span class="stat-label">Total return</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">${{ "%.2f"|format(view.results['Final total cash']) }}</span>
+          <span class="stat-label">Final value</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ view.results['No of trades'] }}</span>
+          <span class="stat-label">Trades executed</span>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <img src="data:image/png;base64,{{ view.signals_chart }}" alt="{{ view.label }} signals chart">
+      </div>
+      <div class="chart-card">
+        <img src="data:image/png;base64,{{ view.performance_chart }}" alt="{{ view.label }} portfolio performance chart">
+      </div>
+    {% else %}
+      <p class="empty-note">No trades were triggered for this strategy over the selected range.</p>
+    {% endif %}
+  </div>
+</section>
+{% endfor %}
+
+{% if ml_view %}
+<section class="section {{ 'section-alt' if (strategy_results|length) is even else '' }}">
+  <div class="container">
+    <h2 class="section-title">{{ ml_view.label }}</h2>
+    <p class="strategy-desc">{{ ml_view.desc }}</p>
+
+    <div class="chart-card">
+      <img src="data:image/png;base64,{{ ml_view.prediction_chart }}" alt="ML prediction chart">
+    </div>
+
+    {% if ml_view.results %}
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value {{ 'positive' if ml_view.results['Percentage returns'] >= 0 else 'negative' }}">{{ "%+.1f"|format(ml_view.results['Percentage returns']) }}%</span>
+          <span class="stat-label">Total return</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">${{ "%.2f"|format(ml_view.results['Final total cash']) }}</span>
+          <span class="stat-label">Final value</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ ml_view.results['No of trades'] }}</span>
+          <span class="stat-label">Trades executed</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <img src="data:image/png;base64,{{ ml_view.signals_chart }}" alt="ML signals chart">
+      </div>
+      <div class="chart-card">
+        <img src="data:image/png;base64,{{ ml_view.performance_chart }}" alt="ML portfolio performance chart">
+      </div>
+    {% else %}
+      <p class="empty-note">No trades were triggered by the model over the selected range.</p>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section section-alt cta-footer">
+  <div class="container">
+    <a class="btn btn-primary" href="{{ url_for('backtest') }}">Run another backtest</a>
+  </div>
+</section>
+{% endblock %}
